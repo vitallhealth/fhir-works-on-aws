@@ -99,18 +99,13 @@ async function getAuthToken(
 
   const authToken = `Basic ${Buffer.from(`${clientId}:${clientPw}`).toString('base64')}`;
 
-  const config: AxiosRequestConfig = {
-    method: 'post',
-    url: `${oauthApiEndpoint}/token`,
+  const response = await axios.post(`${oauthApiEndpoint}/token`, data, {
     headers: {
       Accept: 'application/json',
       Authorization: authToken,
       'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    data
-  };
-
-  const response = await axios(config);
+    }
+  });
   return response.data.access_token;
 }
 
