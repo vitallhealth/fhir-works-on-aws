@@ -1,0 +1,16 @@
+import fs from 'fs';
+import readline from 'readline';
+import path from 'path';
+import { ResourceUtils } from '@smile-cdr/fhirts/dist/library/ResourceUtils/ResourceUtils';
+import { Appointment } from '@smile-cdr/fhirts/dist/FHIR-R4/classes/appointment';
+import { Task } from '@smile-cdr/fhirts/dist/FHIR-R4/classes/task';
+import { Encounter } from '@smile-cdr/fhirts/dist/FHIR-R4/classes/encounter';
+import { DiagnosticReport } from '@smile-cdr/fhirts/dist/FHIR-R4/classes/diagnosticReport';
+import { Consent } from '@smile-cdr/fhirts/dist/FHIR-R4/classes/consent';
+import { Immunization } from '@smile-cdr/fhirts/dist/FHIR-R4/classes/immunization';
+import { MedicationStatement } from '@smile-cdr/fhirts/dist/FHIR-R4/classes/medicationStatement';
+import { Observation } from '@smile-cdr/fhirts/dist/FHIR-R4/classes/observation';
+import { RiskAssessment } from '@smile-cdr/fhirts/dist/FHIR-R4/classes/riskAssessment';
+import { Coding } from '@smile-cdr/fhirts/dist/FHIR-R4/classes/coding';
+import { FamilyMemberHistory } from '@smile-cdr/fhirts/dist/FHIR-R4/classes/familyMemberHistory';
+import { QuestionnaireResponse } from '@smile-cdr/fhirts/dist/FHIR-R4/classes/questionnaireResponse';

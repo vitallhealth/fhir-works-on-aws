@@ -41,7 +41,7 @@ if ('--{}'.format('groupId') in sys.argv):
 tenantId = None
 if ('--{}'.format('tenantId') in sys.argv):
     tenantId = getResolvedOptions(sys.argv, ['tenantId'])['tenantId']
-exportDeletedResources = True
+exportDeletedResources = False
 if ('--{}'.format('exportDeletedResources') in sys.argv):
     exportDeletedResources = getResolvedOptions(sys.argv, ['exportDeletedResources'])[
         'exportDeletedResources'] == 'true'

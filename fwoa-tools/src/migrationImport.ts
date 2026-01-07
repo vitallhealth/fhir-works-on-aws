@@ -111,7 +111,7 @@ export async function startImport(
           KmsKeyId: process.env.IMPORT_KMS_KEY_ARN!
         }
       },
-      ClientToken: HEALTHLAKE_CLIENT_TOKEN || uuidv4()
+      ClientToken: uuidv4()
     };
     try {
       const importJob = await healthLake.startFHIRImportJob(params).promise();
@@ -136,7 +136,7 @@ export async function startImport(
             );
 
             await sleep(POLLING_TIME);
-            await deleteFhirResourceFromHealthLakeIfNeeded(folderName, outputFile);
+            // await deleteFhirResourceFromHealthLakeIfNeeded(folderName, outputFile);
             logs.write(`${new Date().toISOString()}: Import of folder ${folderName} import succeeded!\n`);
             successfullyCompletedFolders.push(folderName);
             break;
@@ -144,6 +144,7 @@ export async function startImport(
             jobStatus.ImportJobProperties.JobStatus === 'FAILED' ||
             jobStatus.ImportJobProperties.JobStatus === 'COMPLETED_WITH_ERRORS'
           ) {
+            logs.write(`${new Date().toISOString()}: ${JSON.stringify(jobStatus)}`);
             throw new Error(
               `Import Job for folder ${folderName} failed! Job Id: ${importJob.JobId}. Error: ${jobStatus.$response.error}.`
             );
@@ -164,6 +165,7 @@ export async function startImport(
         );
       }
     } catch (e) {
+      console.log(`Line 168\n` + e);
       if (e.message.includes('Rate exceeded') || e.message.includes('429')) {
         // Only 1 import job allowed per minute by default
         logs.write(`${new Date().toISOString()}: Failed Import Job for folder ${folderName}, retrying...\n`);
@@ -296,12 +298,12 @@ export async function deleteFhirResourceFromHealthLakeIfNeeded(
         logs.write(
           `${new Date().toISOString()}: Resource at ${resourcePath} line ${i} is marked for DELETION\n`
         );
-        deleteQueue.push(`/${resource.resourceType}/${resource.id}`);
-        if (deleteQueue.length >= HEALTHLAKE_BUNDLE_LIMIT) {
-          // eslint-disable-next-line no-await-in-loop
-          await deleteResourcesInBundle(deleteQueue);
-          deleteQueue = [];
-        }
+        // deleteQueue.push(`/${resource.resourceType}/${resource.id}`);
+        // if (deleteQueue.length >= HEALTHLAKE_BUNDLE_LIMIT) {
+        //   // eslint-disable-next-line no-await-in-loop
+        //   await deleteResourcesInBundle(deleteQueue);
+        //   deleteQueue = [];
+        // }
       }
       i++;
     }
@@ -339,6 +341,7 @@ export async function deleteResourcesInBundle(
 
     await healthLakeClient.post(`${process.env.DATASTORE_ENDPOINT}`, JSON.stringify(bundle));
   } catch (e) {
+    console.log(`deleteResourcesInBundle:\n${e}`);
     logs.write(
       `${new Date().toISOString()}: Failed to delete resources - Attempt #${retryAttempts}. Retrying...\n`
     );
@@ -364,7 +367,7 @@ async function runScript(): Promise<void> {
 
   await checkConfiguration(logs);
   await checkConvertedBinaryFileSize(jobId);
-  await checkFolderSizeOfResource(Object.keys(outputFile.file_names), jobId);
+  // await checkFolderSizeOfResource(Object.keys(outputFile.file_names), jobId);
   if (!dryRun) {
     try {
       const sortedKeys = Object.keys(outputFile.file_names).sort((a: string, b: string) => {
