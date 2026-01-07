@@ -30,7 +30,26 @@
     "test": "UNIT_TEST=true heft test --clean --no-build && rushx pkg-json-lint",
     "watch": "tsc -w",
     "export:dry": "ts-node ./src/migrationExport.ts -d",
-    "export": "ts-node ./src/migrationExport.ts"
+    "export": "ts-node ./src/migrationExport.ts",
+    "binary:dry": "ts-node ./src/binaryConverter.ts -d",
+    "binary": "ts-node ./src/binaryConverter.ts",
+    "import:dry": "ts-node ./src/migrationImport.ts -d",
+    "import:continue": "ts-node ./src/migrationImport.ts -c",
+    "import": "ts-node ./src/migrationImport.ts",
+    "getFailedResources": "ts-node ./src/getFailedResourcePaths.ts job-ids.txt > ./paths.txt",
+    "getFailedJobs": "ts-node ./src/getFailedJobIds.ts import_output_1764086491782.log > job-ids.txt",
+    "storeFailingResources": "ts-node ./src/storeFailingResources.ts",
+    "extractFailedResources": "ts-node ./src/extractFailedResources.ts ./downloads",
+    "extractResourceTypeErrors": "ts-node ./src/extractResourceTypeErrors.ts",
+    "addFailedResources": "ts-node ./src/addFailedResourcesToNewBucket.ts",
+    "downloadFailedResourcesExport": "ts-node ./src/downloadFailedResourcesExport.ts",
+    "downloadFailedResourcesImport": "ts-node ./src/downloadFailedResourcesImport.ts",
+    "trimFailedExportResources": "ts-node ./src/trimFailedExportResources.ts",
+    "addIssuesToExportResources": "ts-node ./src/addIssuesToExportResources.ts",
+    "getUniqueErrorsForFailedResources": "ts-node ./src/getUniqueErrorsForFailedResources.ts",
+    "fixFailedResources": "ts-node ./src/fixFailedResources.ts",
+    "combineFailedResources": "ts-node ./src/combineFailedResources.ts",
+    "compareMasters": "ts-node ./src/compareMasters.ts"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -43,7 +62,9 @@
     }
   },
   "dependencies": {
+    "@smile-cdr/fhirts": "^2.3.0",
     "axios": "0.30.2",
+    "jsondiffpatch": "^0.7.3",
     "lodash": "^4.17.21",
     "object-hash": "^3.0.0",
     "readline": "^1.3.0"
