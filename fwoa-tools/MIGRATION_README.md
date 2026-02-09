@@ -26,3 +26,6 @@
    - Manual:
      - On the HealthLake console, start an Import.
        - Point it at the `{job-id}-processed` folder, and fill in all relevant fields
+       - This will start a HealthLake FHIR import job, and display a job ID at the top of the screen
+       - Check job status using the Healthlake FHIR import job ID
+         - `aws healthlake describe-fhir-import-job --datastore-id <your-datastore-id> --job-id <your-job-id>`
